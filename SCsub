@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+# SCsub
+
+Import('env')
+Import("env_modules")
+
+env_indie = env_modules.Clone()
+
+# Godot source files
+env_indie.add_source_files(env.modules_sources, "*.cpp")
