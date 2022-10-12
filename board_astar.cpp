@@ -425,6 +425,8 @@ bool BoardAstar::_solve(Point *p_begin_point, Point *p_end_point) {
 
 bool BoardAstar::_solve_double(Point *p_begin_point_1, Point *p_begin_point_2, Point *p_end_point) {
 	pass++;
+	p_begin_point_1->closed_pass = pass;
+	p_begin_point_2->closed_pass = pass;
 
 	if (p_end_point->solid) {
 		return false;
@@ -634,11 +636,15 @@ Vector<Vector2> BoardAstar::get_id_path_float(const Vector2 &p_from_id, const Ve
 	Point *b = _get_point(p_to_id.x, p_to_id.y);
 	
 	if (real_t(int32_t(p_from_id.x)) != p_from_id.x) {
+		if (!is_in_bounds(int32_t(p_from_id.x) + 1, p_from_id.y))
+			return get_id_path(p_from_id, p_to_id);
 		a_2 = _get_point(int32_t(p_from_id.x) + 1, p_from_id.y);
+
 	} else if (real_t(int32_t(p_from_id.y)) != p_from_id.y) {
+		if (!is_in_bounds(p_from_id.x, int32_t(p_from_id.y) + 1))
+			return get_id_path(p_from_id, p_to_id);
 		a_2 = _get_point(p_from_id.x, int32_t(p_from_id.y) + 1);
-	}
-	else {
+	} else {
 		ERR_FAIL_COND_V_MSG(false, Vector<Vector2>(), "Wrong input from id");
 	}
 
@@ -662,8 +668,8 @@ Vector<Vector2> BoardAstar::get_id_path_float(const Vector2 &p_from_id, const Ve
 	begin_point_1->prev_point = begin_point_2;
 	begin_point_2->prev_point = begin_point_1;
 
-	begin_point_1->g_score = _estimate_cost(begin_point_1->id, Vector2i(p_from_id));
-	begin_point_2->g_score = _estimate_cost(begin_point_2->id, Vector2i(p_from_id));
+	begin_point_1->g_score = (Vector2(begin_point_1->id) -p_from_id).length();
+	begin_point_2->g_score = (Vector2(begin_point_2->id) - p_from_id).length();
 
 	bool found_route = _solve_double(begin_point_1, begin_point_2, end_point);
 	if (!found_route) {
