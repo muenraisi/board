@@ -35,6 +35,8 @@ public:
 	void set_base(StringName name, Variant value);
 	Variant get_base(StringName name);
 
+	Variant get(StringName name);
+
 	BoardProperty(){};
 };
 
