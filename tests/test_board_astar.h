@@ -1,4 +1,4 @@
-// test_indie_a_star_grid_2d.h
+// test_board_astar.h
 #ifndef TEST_BOARD_ASTAR_H
 #define TEST_BOARD_ASTAR_H
 
