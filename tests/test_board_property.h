@@ -8,18 +8,18 @@
 namespace TestBoardProperty {
 
 TEST_CASE("[Modules][TestBoardProperty] Adding numbers") {
-    Ref<BoardProperty> property = memnew(BoardProperty);
+    Ref<BoardPropertyManager> property = memnew(BoardPropertyManager);
 
 	//1.添加属性
 	property->insert("atk", 100);
 	CHECK(property->has("atk"));
 
 	//2. 自动生成各属性接口
-	property->set_base("atk", 50);
-	CHECK((property->get_base("atk")) == Variant(50));
+	property->set_var("atk", 50);
+	CHECK((property->get_var("atk")) == Variant(50));
 
 	//3. 获取最终属性
-	CHECK((property->get_final("atk")) == Variant(50));
+	CHECK((property->get_final_var("atk")) == Variant(50));
 	//set buff
 	//CHECK buff
 
@@ -34,6 +34,9 @@ TEST_CASE("[Modules][TestBoardProperty] Adding numbers") {
 
 
 	//5. 获取值时，确保在范围内
+	property->set_var("atk", 500000);
+	CHECK((property->get_final_var("atk")) == Variant(10000));
+
 	
 	//# 3. buff接口
 	// buff = memew(Buffer)

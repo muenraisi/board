@@ -12,7 +12,8 @@ void initialize_board_module(ModuleInitializationLevel p_level) {
             return;
     }
   GDREGISTER_CLASS(BoardAstar);
-	GDREGISTER_CLASS(BoardProperty);
+	//GDREGISTER_NATIVE_STRUCT(BoardProperty, "	Variant var;Variant min;Variant max;");
+	GDREGISTER_CLASS(BoardPropertyManager);
 
 }
 

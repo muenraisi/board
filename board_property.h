@@ -8,27 +8,52 @@
 #include "core/variant/array.h"
 #include "core/variant/variant.h"
 
-struct BoardPropertyStruct {
-	Variant base;
-	Variant min;
-	Variant max;
-	Array extend;
+class BoardPropertyManager : public RefCounted {
+	GDCLASS(BoardPropertyManager, RefCounted);
 
-	BoardPropertyStruct() :
-			base(Variant()), min(Variant()), max(Variant()), extend(Array()){};
-	BoardPropertyStruct(Variant &base_) :
-			base(base_), min(Variant()), max(Variant()), extend(Array()){};
-	BoardPropertyStruct(Variant &base_, Variant &min_, Variant &max_) :
-			base(base_), min(min_), max(max_), extend(Array()){};
-	BoardPropertyStruct(Variant &base_, Variant &min_, Variant &max_, Array &extend_) :
-			base(base_), min(min_), max(max_), extend(extend_){};
-};
+	struct BoardProperty {
+		Variant var;
+		Variant min;
+		Variant max;
 
-class BoardProperty : public RefCounted {
-	GDCLASS(BoardProperty, RefCounted);
+		BoardProperty(){};
+
+		BoardProperty(Variant var_, Variant min_, Variant max_) :
+				var(var_), min(min_), max(max_){};
+
+		void clamp_var() {
+			if (min != Variant() && var < min)
+				var = min;
+			if (max != Variant() && max < var)
+				var = max;
+		};
+	};
+
+	struct BoardPropertyProcessor {
+		BoardProperty base;
+		Array extends;
+
+		BoardPropertyProcessor(){};
+		BoardPropertyProcessor(BoardProperty &base_, Array &extends_) :
+				base(base_), extends(extends_){};
+		BoardPropertyProcessor(Variant var_, Variant min_, Variant max_, Array &extends_) :
+				base(BoardProperty(var_, min_, max_)), extends(extends_){};
+
+		BoardProperty get_final() {
+			BoardProperty final;
+			if (extends.is_empty()) {
+				final = base;
+			} else {
+				// TODO: calc final with extends
+			}
+			final.clamp_var();
+			WARN_PRINT("Array extends is not empty and the code is undone");
+			return final;
+		}
+	};
 
 private:
-	HashMap<StringName, BoardPropertyStruct> _data;
+	HashMap<StringName, BoardPropertyProcessor> _data;
 
 protected:
 	static void _bind_methods();
@@ -37,10 +62,12 @@ public:
 	bool has(StringName name);
 
 	void insert(StringName name, Variant base = Variant(), Variant min = Variant(), Variant max = Variant(), Array extend = Array());
-	void set_full(StringName name, Variant base, Variant min, Variant max, Array extend = Array());
+	void set_full(StringName name, Variant var, Variant min, Variant max, Array extend = Array());
 
-	void set_base(StringName name, Variant base);
-	Variant get_base(StringName name);
+	void set_base(StringName name, BoardProperty &base);
+	BoardProperty get_base(StringName name);
+	void set_var(StringName name, Variant var);
+	Variant get_var(StringName name);
 	void set_min(StringName, Variant min);
 	Variant get_min(StringName name);
 	void set_max(StringName, Variant max);
@@ -48,9 +75,12 @@ public:
 
 	void set_range(StringName name, Variant min, Variant max);
 
-	Variant get_final(StringName name);
+	BoardProperty get_final(StringName name);
+	Variant get_final_var(StringName name);
+	Variant get_final_min(StringName name);
+	Variant get_final_max(StringName name);
 
-	BoardProperty(){};
+	BoardPropertyManager(){};
 };
 
 #endif // BOARD_PROPERTY_H
