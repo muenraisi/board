@@ -17,7 +17,7 @@ void BoardPropertyManager::insert(StringName name, Variant var, Variant min, Var
 
 void BoardPropertyManager::set_full(StringName name, Variant var, Variant min, Variant max, Array extend) {
 	ERR_FAIL_COND_MSG(!has(name), vformat("Board Property has not %s property!", name));
-	_data[name] =  BoardPropertyProcessor(var, min, max, extend);
+	_data[name] = BoardPropertyProcessor(var, min, max, extend);
 }
 
 void BoardPropertyManager::set_base(StringName name, BoardProperty& base) {
@@ -85,13 +85,13 @@ Variant BoardPropertyManager::get_final_max(StringName name) {
 void BoardPropertyManager::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("has", "name"), &BoardPropertyManager::has);
 
-	ClassDB::bind_method(D_METHOD("insert", "name", "base", "min", "max", "extends"), &BoardPropertyManager::insert, Variant(), Variant(), Variant(), Array());
+	ClassDB::bind_method(D_METHOD("insert", "name", "var", "min", "max", "extends"), &BoardPropertyManager::insert, Variant(), Variant(), Variant(), Array());
 	ClassDB::bind_method(D_METHOD("set_full", "name", "base", "min", "max", "extends"), &BoardPropertyManager::set_full, Array());
 
 	//ClassDB::bind_method(D_METHOD("set_base", "name", "base"), &BoardPropertyManager::set_base);
 	//ClassDB::bind_method(D_METHOD("get_base", "name"), &BoardPropertyManager::get_base);
 	ClassDB::bind_method(D_METHOD("set_var", "name", "var"), &BoardPropertyManager::set_var);
-	ClassDB::bind_method(D_METHOD("get_var", "name"), &BoardPropertyManager::get_min);
+	ClassDB::bind_method(D_METHOD("get_var", "name"), &BoardPropertyManager::get_var);
 	ClassDB::bind_method(D_METHOD("set_min", "name", "min"), &BoardPropertyManager::set_min);
 	ClassDB::bind_method(D_METHOD("get_min", "name"), &BoardPropertyManager::get_min);
 	ClassDB::bind_method(D_METHOD("set_max", "name", "max"), &BoardPropertyManager::set_max);

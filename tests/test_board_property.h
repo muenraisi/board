@@ -28,14 +28,18 @@ TEST_CASE("[Modules][TestBoardProperty] Adding numbers") {
 	CHECK((property->get_min("atk")) == Variant(0));
 	property->set_max("atk", 999999);
 	CHECK((property->get_max("atk")) == Variant(999999));
-	property->set_range("atk", 1, 10000);
-	CHECK((property->get_min("atk")) == Variant(1));
-	CHECK((property->get_max("atk")) == Variant(10000));
+	property->set_range("atk", 0, 100);
+	CHECK((property->get_min("atk")) == Variant(0));
+	CHECK((property->get_max("atk")) == Variant(100));
 
 
 	//5. 获取值时，确保在范围内
 	property->set_var("atk", 500000);
-	CHECK((property->get_final_var("atk")) == Variant(10000));
+	CHECK((property->get_final_var("atk")) == Variant(100));
+	property->set_var("atk", 90);
+	CHECK((property->get_final_var("atk")) == Variant(90));
+	property->set_var("atk", -5);
+	CHECK((property->get_final_var("atk")) == Variant(0));
 
 	
 	//# 3. buff接口
