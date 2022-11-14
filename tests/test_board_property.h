@@ -3,7 +3,7 @@
 #define TEST_BOARD_PROPERTY_H
 
 #include "tests/test_macros.h"
-#include "modules/board/board_property.h"
+#include "modules/board/board_property_manager.h"
 
 namespace TestBoardProperty {
 
@@ -24,13 +24,13 @@ TEST_CASE("[Modules][TestBoardProperty] Adding numbers") {
 	//CHECK buff
 
 	//4. 设置和获取属性最大值和最小值
-	property->set_min("atk", 0);
-	CHECK((property->get_min("atk")) == Variant(0));
-	property->set_max("atk", 999999);
-	CHECK((property->get_max("atk")) == Variant(999999));
+	property->set_low("atk", 0);
+	CHECK((property->get_low("atk")) == Variant(0));
+	property->set_upp("atk", 999999);
+	CHECK((property->get_upp("atk")) == Variant(999999));
 	property->set_range("atk", 0, 100);
-	CHECK((property->get_min("atk")) == Variant(0));
-	CHECK((property->get_max("atk")) == Variant(100));
+	CHECK((property->get_low("atk")) == Variant(0));
+	CHECK((property->get_upp("atk")) == Variant(100));
 
 
 	//5. 获取值时，确保在范围内
